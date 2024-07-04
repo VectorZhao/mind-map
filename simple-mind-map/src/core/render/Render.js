@@ -42,6 +42,8 @@ import { Polygon } from '@svgdotjs/svg.js'
 const layouts = {
   // 逻辑结构图
   [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]: LogicalStructure,
+  // 向左逻辑结构图
+  [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE_LEFT]: LogicalStructure,
   // 思维导图
   [CONSTANTS.LAYOUT.MIND_MAP]: MindMap,
   // 目录组织图
@@ -1013,14 +1015,18 @@ class Render {
   copy() {
     this.beingCopyData = this.copyNode()
     if (!this.beingCopyData) return
-    setDataToClipboard(createSmmFormatData(this.beingCopyData))
+    if (!this.mindMap.opt.disabledClipboard) {
+      setDataToClipboard(createSmmFormatData(this.beingCopyData))
+    }
   }
 
   // 剪切节点
   cut() {
     this.mindMap.execCommand('CUT_NODE', copyData => {
       this.beingCopyData = copyData
-      setDataToClipboard(createSmmFormatData(copyData))
+      if (!this.mindMap.opt.disabledClipboard) {
+        setDataToClipboard(createSmmFormatData(copyData))
+      }
     })
   }
 
@@ -1029,17 +1035,20 @@ class Render {
     const {
       errorHandler,
       handleIsSplitByWrapOnPasteCreateNewNode,
-      handleNodePasteImg
+      handleNodePasteImg,
+      disabledClipboard
     } = this.mindMap.opt
     // 读取剪贴板的文字和图片
-    let text = null
+    let text = ''
     let img = null
-    try {
-      const res = await getDataFromClipboard()
-      text = res.text
-      img = res.img
-    } catch (error) {
-      errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
+    if (!disabledClipboard) {
+      try {
+        const res = await getDataFromClipboard()
+        text = res.text || ''
+        img = res.img || null
+      } catch (error) {
+        errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
+      }
     }
     // 检查剪切板数据是否有变化
     // 通过图片大小来判断图片是否发生变化，可能是不准确的，但是目前没有其他好方法
