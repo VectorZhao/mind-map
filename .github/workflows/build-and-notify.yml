@@ -1,8 +1,9 @@
 name: Build and Notify
 
 on:
+  workflow_dispatch:
   release:
-    types: [published, created]
+    types: [published]
 
 jobs:
   build:
