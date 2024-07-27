@@ -431,4 +431,12 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/晴空.jpg" style="width: 50px;height: 50px;" />
         <span>晴空</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>黄泳</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/ccccs.jpg" style="width: 50px;height: 50px;" />
+        <span>ccccs</span>
+    </span>
 </p>
