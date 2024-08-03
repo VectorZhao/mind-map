@@ -1264,6 +1264,10 @@ class Render {
   // 如果是富文本模式，那么某些层级变化需要更新样式
   checkNodeLayerChange(node, toNode, toNodeIsParent = false) {
     if (this.mindMap.richText) {
+      // 如果设置了自定义样式那么不需要更新
+      if (this.mindMap.richText.checkNodeHasCustomRichTextStyle(node)) {
+        return
+      }
       const toIndex = toNodeIsParent ? toNode.layerIndex + 1 : toNode.layerIndex
       let nodeLayerChanged =
         (node.layerIndex === 1 && toIndex !== 1) ||
@@ -1462,6 +1466,9 @@ class Render {
       this.checkNodeLayerChange(item, toNode, true)
       this.removeNodeFromActiveList(item)
       removeFromParentNodeData(item)
+      toNode.setData({
+        expand: true
+      })
       toNode.nodeData.children.push(item.nodeData)
     })
     this.emitNodeActiveEvent()
@@ -1475,10 +1482,24 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
+      node.setData({
+        expand: true
+      })
       node.nodeData.children.push(
         ...data.map(item => {
           const newData = simpleDeepClone(item)
-          createUidForAppointNodes([newData], true)
+          createUidForAppointNodes([newData], true, node => {
+            // 可能跨层级复制，那么富文本样式需要更新
+            if (this.mindMap.richText) {
+              // 如果设置了自定义样式那么不需要更新
+              if (
+                this.mindMap.richText.checkNodeHasCustomRichTextStyle(node.data)
+              ) {
+                return
+              }
+              node.data.resetRichText = true
+            }
+          })
           return newData
         })
       )
