@@ -36,6 +36,7 @@ export default [
       { path: 'course27', title: '快捷键操作如何传递自定义参数' },
       { path: 'course28', title: '如何动态修改自定义元素的大小' },
       { path: 'course29', title: '局域网docker部署解决HTTPS问题的一种方法' },
+      { path: 'course30', title: '如何通过代码激活节点' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
@@ -49,6 +50,7 @@ export default [
       { path: 'richText', title: 'RichText插件' },
       { path: 'select', title: 'Select 插件 ' },
       { path: 'start', title: '开始' },
+      { path: 'question', title: '常见问题' },
       { path: 'translate', title: '贡献' },
       { path: 'utils', title: '内置工具方法' },
       { path: 'view', title: 'View实例' },
@@ -68,6 +70,7 @@ export default [
       { path: 'outerFrame', title: 'OuterFrame插件' },
       { path: 'handDrawnLikeStyle', title: 'HandDrawnLikeStyle收费插件' },
       { path: 'notation', title: 'Notation收费插件' },
+      { path: 'numbers', title: 'Numbers收费插件' },
       { path: 'help1', title: '概要/关联线' },
       { path: 'help2', title: '客户端' },
       { path: 'help3', title: '打开预览在线文件' },
@@ -97,6 +100,7 @@ export default [
       { path: 'richText', title: 'RichText plugin' },
       { path: 'select', title: 'Select plugin' },
       { path: 'start', title: 'Start' },
+      { path: 'question', title: 'Questions' },
       { path: 'translate', title: 'Contribute' },
       { path: 'utils', title: 'Utility Methods' },
       { path: 'view', title: 'View instance' },
@@ -118,6 +122,7 @@ export default [
         title: 'HandDrawnLikeStyle chargeable plugin'
       },
       { path: 'notation', title: 'Notation chargeable plugin' },
+      { path: 'numbers', title: 'Numbers chargeable plugin' },
       { path: 'client', title: 'Client' }
     ]
   }

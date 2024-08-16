@@ -16,6 +16,8 @@
   }
 });
 </code></pre>
+<h3>Special Reminder</h3>
+<p>Node tree rendering is an asynchronous operation, so it is not possible to immediately call some operations that require node rendering to be completed after instantiation, otherwise errors and unknown phenomena may occur, You need to listen for the 'node_tree_render_end' event and wait until the node tree rendering is complete before proceeding. In addition to instantiation, other methods such as 'setData', 'updateData', 'render', etc. are asynchronous and need to be handled in this way.</p>
 <h2>Instantiation options</h2>
 <h3>1.Base</h3>
 <table>
@@ -552,6 +554,13 @@
 <td>Object</td>
 <td>{ time: 250,  padding: 100, removeNodeWhenOutCanvas: true }</td>
 <td>Performance optimization mode configuration. time（How often do nodes refresh after a view change. Unit:ms）、padding（Still rendering nodes beyond the specified range around the canvas）、removeNodeWhenOutCanvas（Is the node deleted from the canvas after being moved out of the visible area of the canvas）</td>
+<td></td>
+</tr>
+<tr>
+<td>notShowExpandBtn（v0.10.6+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Do not display the expand/collapse button, higher priority than the 'alwaysShowExpandBtn' configuration</td>
 <td></td>
 </tr>
 </tbody>
@@ -1722,6 +1731,11 @@ poor performance and should be used sparingly.</p>
 <td>Triggered after updating configuration</td>
 <td>opt（Updated configuration object）</td>
 </tr>
+<tr>
+<td>node_note_click（v0.10.6+）</td>
+<td>Click event of node note icon</td>
+<td>this(Current node instance)、e（Event Object）、node（Icon node）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1839,7 +1853,7 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>SET_NODE_ACTIVE</td>
-<td>Set whether the node is active</td>
+<td>Set whether the node is active(This command only updates the activation fields and node activation styles in the node data. If you want to achieve the same effect as clicking on a node with the mouse, please use the 'active()' method of the node instance directly.)</td>
 <td>node (the node to set), active (boolean, whether to activate)</td>
 </tr>
 <tr>

@@ -21,6 +21,22 @@ The rendering tree, also known as the data tree of the mind map.
 
 ## Methods
 
+### activeMultiNode(nodeList = [])
+
+> v0.10.6+
+
+- `nodeList`：Node instance list
+
+Manually activate multiple nodes. To activate a single node, please directly call the 'active()' method of the node instance.
+
+### cancelActiveMultiNode(nodeList = [])
+
+> v0.10.6+
+
+- `nodeList`：Node instance list
+
+Manually deactivate multiple nodes. To deactivate a single node, please directly call the 'deactivate()' method of the node instance.
+
 ### highlightNode(node, range)
 
 > v0.9.0+
@@ -100,7 +116,7 @@ Add a node to the active list.
 
 - `notEmitBeforeNodeActiveEvent`：v0.9.12+，is not distribute the 'before_node_active' event, which defaults to 'false' and will be distributed;
 
-Add a node to the active list.
+Add a node to the active list. If you want to manually activate a node to achieve the same effect as clicking with a mouse, please directly call the 'active()' method of the node instance.
 
 ### removeActiveNode(node)
 
