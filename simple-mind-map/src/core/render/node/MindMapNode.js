@@ -23,6 +23,8 @@ class MindMapNode {
     this.opt = opt
     // 节点数据
     this.nodeData = this.handleData(opt.data || {})
+    // 保存本次更新时的节点数据快照
+    this.nodeDataSnapshot = ''
     // uid
     this.uid = opt.uid
     // 控制实例
@@ -628,12 +630,15 @@ class MindMapNode {
       this.active(e)
     })
     this.group.on('mousedown', e => {
-      e.preventDefault()
       const {
         readonly,
         enableCtrlKeyNodeSelection,
-        useLeftKeySelectionRightKeyDrag
+        useLeftKeySelectionRightKeyDrag,
+        mousedownEventPreventDefault
       } = this.mindMap.opt
+      if (mousedownEventPreventDefault) {
+        e.preventDefault()
+      }
       // 只读模式不需要阻止冒泡
       if (!readonly) {
         if (this.isRoot) {
@@ -789,9 +794,12 @@ class MindMapNode {
     if (this.updateUserListNode) this.updateUserListNode()
     // 更新节点位置
     let t = this.group.transform()
-    // 如果节点位置没有变化，则返回
-    if (this.left === t.translateX && this.top === t.translateY) return
-    this.group.translate(this.left - t.translateX, this.top - t.translateY)
+    // 保存一份当前节点数据快照
+    this.nodeDataSnapshot = JSON.stringify(this.getData())
+    // 节点位置变化才更新，因为即使值没有变化属性设置操作也是耗时的
+    if (this.left !== t.translateX || this.top !== t.translateY) {
+      this.group.translate(this.left - t.translateX, this.top - t.translateY)
+    }
   }
 
   // 获取节点相当于画布的位置
@@ -966,7 +974,7 @@ class MindMapNode {
 
   //  隐藏节点
   hide() {
-    this.group.hide()
+    if (this.group) this.group.hide()
     this.hideGeneralization()
     if (this.parent) {
       let index = this.parent.children.indexOf(this)
@@ -1009,7 +1017,7 @@ class MindMapNode {
   // 包括连接线和下级节点
   setOpacity(val) {
     // 自身及连线
-    this.group.opacity(val)
+    if (this.group) this.group.opacity(val)
     this._lines.forEach(line => {
       line.opacity(val)
     })
@@ -1048,13 +1056,13 @@ class MindMapNode {
   // 被拖拽中
   startDrag() {
     this.isDrag = true
-    this.group.addClass('smm-node-dragging')
+    if (this.group) this.group.addClass('smm-node-dragging')
   }
 
   // 拖拽结束
   endDrag() {
     this.isDrag = false
-    this.group.removeClass('smm-node-dragging')
+    if (this.group) this.group.removeClass('smm-node-dragging')
   }
 
   //  连线
@@ -1297,7 +1305,7 @@ class MindMapNode {
 
   // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置是相对于浏览器窗口左上角的位置
   getRect() {
-    return this.group.rbox()
+    return this.group ? this.group.rbox() : null
   }
 
   // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置信息相对于画布
