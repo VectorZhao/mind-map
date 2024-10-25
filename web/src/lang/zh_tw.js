@@ -40,7 +40,12 @@ export default {
     edge: '邊緣',
     rainbowLines: '彩虹線條',
     notUseRainbowLines: '不使用彩虹線條',
-    outerFramePadding: '外框內距'
+    outerFramePadding: '外框內距',
+    tagPosition: '節點標簽顯示的位置',
+    tagPositionRight: '文本右側',
+    tagPositionBottom: '文本下面',
+    alwaysShowExpandBtn: '是否壹直顯示展開收起按鈕',
+    enableAutoEnterTextEditWhenKeydown: '鍵盤輸入時自動進入文本編輯'
   },
   setting: {
     title: '設置',

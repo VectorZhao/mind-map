@@ -177,6 +177,58 @@
           >
         </div>
       </div>
+      <!-- 是否开启文本编辑时实时更新节点大小 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.openRealtimeRenderOnNodeTextEdit"
+            @change="
+              updateOtherConfig('openRealtimeRenderOnNodeTextEdit', $event)
+            "
+            >{{ $t('setting.openRealtimeRenderOnNodeTextEdit') }}</el-checkbox
+          >
+        </div>
+      </div>
+      <!-- 是否显示滚动条 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.isShowScrollbar"
+            @change="updateLocalConfig('isShowScrollbar', $event)"
+            >{{ $t('setting.isShowScrollbar') }}</el-checkbox
+          >
+        </div>
+      </div>
+      <!-- 是否一直显示展开收起按钮 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.alwaysShowExpandBtn"
+            @change="updateOtherConfig('alwaysShowExpandBtn', $event)"
+            >{{ $t('setting.alwaysShowExpandBtn') }}</el-checkbox
+          >
+        </div>
+      </div>
+      <!-- 是否在键盘输入时自动进入节点文本编辑模式 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.enableAutoEnterTextEditWhenKeydown"
+            @change="updateOtherConfig('enableAutoEnterTextEditWhenKeydown', $event)"
+            >{{ $t('setting.enableAutoEnterTextEditWhenKeydown') }}</el-checkbox
+          >
+        </div>
+      </div>
+      <!-- 是否开启手绘风格 -->
+      <div class="row" v-if="supportHandDrawnLikeStyle">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.isUseHandDrawnLikeStyle"
+            @change="updateLocalConfig('isUseHandDrawnLikeStyle', $event)"
+            >{{ $t('setting.isUseHandDrawnLikeStyle') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 配置鼠标滚轮行为 -->
       <div class="row">
         <div class="rowItem">
@@ -258,36 +310,30 @@
           </el-select>
         </div>
       </div>
-      <!-- 是否开启文本编辑时实时更新节点大小 -->
+      <!-- 标签显示的位置 -->
       <div class="row">
         <div class="rowItem">
-          <el-checkbox
-            v-model="config.openRealtimeRenderOnNodeTextEdit"
+          <span class="name">{{ $t('setting.tagPosition') }}</span>
+          <el-select
+            size="mini"
+            style="width: 120px"
+            v-model="config.tagPosition"
+            placeholder=""
             @change="
-              updateOtherConfig('openRealtimeRenderOnNodeTextEdit', $event)
+              value => {
+                updateOtherConfig('tagPosition', value)
+              }
             "
-            >{{ $t('setting.openRealtimeRenderOnNodeTextEdit') }}</el-checkbox
           >
-        </div>
-      </div>
-      <!-- 是否显示滚动条 -->
-      <div class="row">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="localConfigs.isShowScrollbar"
-            @change="updateLocalConfig('isShowScrollbar', $event)"
-            >{{ $t('setting.isShowScrollbar') }}</el-checkbox
-          >
-        </div>
-      </div>
-      <!-- 是否开启手绘风格 -->
-      <div class="row" v-if="supportHandDrawnLikeStyle">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="localConfigs.isUseHandDrawnLikeStyle"
-            @change="updateLocalConfig('isUseHandDrawnLikeStyle', $event)"
-            >{{ $t('setting.isUseHandDrawnLikeStyle') }}</el-checkbox
-          >
+            <el-option
+              :label="$t('setting.tagPositionRight')"
+              value="right"
+            ></el-option>
+            <el-option
+              :label="$t('setting.tagPositionBottom')"
+              value="bottom"
+            ></el-option>
+          </el-select>
         </div>
       </div>
     </div>
@@ -322,7 +368,10 @@ export default {
         mousewheelAction: 'zoom',
         mousewheelZoomActionReverse: false,
         createNewNodeBehavior: 'default',
-        openRealtimeRenderOnNodeTextEdit: true
+        tagPosition: 'right',
+        openRealtimeRenderOnNodeTextEdit: true,
+        alwaysShowExpandBtn: false,
+        enableAutoEnterTextEditWhenKeydown: true
       },
       watermarkConfig: {
         show: false,
@@ -373,14 +422,7 @@ export default {
 
     // 初始化其他配置
     initConfig() {
-      ;[
-        'openPerformance',
-        'enableFreeDrag',
-        'mousewheelAction',
-        'mousewheelZoomActionReverse',
-        'createNewNodeBehavior',
-        'openRealtimeRenderOnNodeTextEdit'
-      ].forEach(key => {
+      Object.keys(this.config).forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
     },
@@ -417,6 +459,9 @@ export default {
       storeConfig({
         config: this.data.config
       })
+      if (['tagPosition', 'alwaysShowExpandBtn'].includes(key)) {
+        this.mindMap.reRender()
+      }
     },
 
     // 更新水印配置

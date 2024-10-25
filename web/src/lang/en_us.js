@@ -72,7 +72,12 @@ export default {
     watermarkAngle: 'Angle',
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
-    belowNode: 'Display below nodes'
+    belowNode: 'Display below nodes',
+    tagPosition: 'Node tag position',
+    tagPositionRight: 'Text right',
+    tagPositionBottom: 'Text bottom',
+    alwaysShowExpandBtn: 'Always show expand btn',
+    enableAutoEnterTextEditWhenKeydown: 'Auto enter text edit when keydown'
   },
   color: {
     moreColor: 'More color'
